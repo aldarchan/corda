@@ -56,8 +56,8 @@ object LogHelper {
         val loggerContext = LogManager.getContext(false) as LoggerContext
         val config = loggerContext.configuration
         val loggerConfig = LoggerConfig(name, level, false)
-        val appender = config.appenders.map { it.value as? ConsoleAppender }.singleOrNull()
-        appender?.let {
+        val appender = config.getLoggerConfig(name).appenders.values.filterIsInstance<ConsoleAppender>().singleOrNull()
+        if (appender != null) {
             loggerConfig.addAppender(appender, null, null)
         }
         config.removeLogger(name)
