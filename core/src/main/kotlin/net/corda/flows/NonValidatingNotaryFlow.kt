@@ -20,8 +20,10 @@ class NonValidatingNotaryFlow(otherSide: Party,
      */
     @Suspendable
     override fun receiveAndVerifyTx(): NotaryFlow.Service.TransactionParts {
-        val ftx = receive<FilteredTransaction>(otherSide).unwrap { it }
-        ftx.verify()
+        val ftx = receive<FilteredTransaction>(otherSide).unwrap {
+            it.verify()
+            it
+        }
         return TransactionParts(ftx.rootHash, ftx.filteredLeaves.inputs, ftx.filteredLeaves.timestamp)
     }
 }
